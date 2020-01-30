@@ -1,4 +1,4 @@
-function New-RubrikExport{
+function New-RubrikFilesetExport{
 
 <#
                     .SYNOPSIS
