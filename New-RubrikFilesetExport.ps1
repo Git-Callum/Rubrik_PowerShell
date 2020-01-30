@@ -89,7 +89,6 @@ function New-RubrikFilesetExport{
 
 
                 $Verification = ($WebRequest -like "*QUEUED*")
-                Write-Host $Verification
 
                 if($Verification -eq $true){
                 Write-Host "Export Queued Sucsesfully"
