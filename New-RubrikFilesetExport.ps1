@@ -102,7 +102,6 @@ function New-RubrikFilesetExport{
                     
 
                 if($Verification -eq $true){
-                Write-Host "QUEUED"
                 Write-Verbose "Export Sucsesfully Queued"
 
                 $result = new-object PSObject
@@ -113,8 +112,14 @@ function New-RubrikFilesetExport{
                 $result
 
                 } Else {
-                Write-Host "Export Failed"
                 Write-Verbose "Export Failed"
+
+                $result = new-object PSObject
+                Add-Member -input $result NoteProperty 'SnapshotID' $id
+                Add-member -input $result NoteProperty 'ExportQueued' "Failed"
+                Add-member -input $result NoteProperty 'Source' $srcpath
+                Add-member -input $result NoteProperty 'Destination' $dstPath
+                $result
 
                 }
                 
