@@ -37,7 +37,8 @@ function New-RubrikFilesetExport{
                   [String]$id,
                   # ID of Snapshot to export
                   [String]$ExportNode,
-                  # Name of host you're exporting through
+                  # Name of host(as FQDN) or HostID you're exporting through
+                  [Alias('HostID')]
                   [String]$RubrikServer,
                   # URI of Rubrik Cluster
                   [String]$SrcPath,
@@ -67,7 +68,14 @@ function New-RubrikFilesetExport{
                 Write-Verbose "Checking that $ExportNode is a valid host to export data through"
 
                 # Obtaining HostID to export data through from Rubrik
+                
+                if($ExportNode -like "Host:::*"){
+                $HostID = $ExportNode
+                
+                } Else {
                 $HostID = (Get-RubrikHost -Name $ExportNode).id
+                }
+
 
                 if($HostID -eq $Null){
                
@@ -89,23 +97,33 @@ function New-RubrikFilesetExport{
 
 
                 $Verification = ($WebRequest -like "*QUEUED*")
+                
+
+                    
 
                 if($Verification -eq $true){
-                Write-Host "Export Queued Sucsesfully"
-                Write-Verbose "Export Queued Sucsesfully"
-                
+                Write-Host "QUEUED"
+                Write-Verbose "Export Sucsesfully Queued"
+
+                $result = new-object PSObject
+                Add-Member -input $result NoteProperty 'SnapshotID' $id
+                Add-member -input $result NoteProperty 'ExportQueued' $Verification
+                Add-member -input $result NoteProperty 'Source' $srcpath
+                Add-member -input $result NoteProperty 'Destination' $dstPath
+                $result
 
                 } Else {
                 Write-Host "Export Failed"
                 Write-Verbose "Export Failed"
 
                 }
-
+                
 
                 }
                 
 
                 }
+
                 
                 }
 
